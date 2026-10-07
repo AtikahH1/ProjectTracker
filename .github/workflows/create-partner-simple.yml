@@ -78,7 +78,7 @@ jobs:
             });
 
             core.info(
-              `Created parent issue #${parent.date.number}: ${parent.data.html_url}`
+              `Created parent issue #${parent.data.number}: ${parent.data.html_url}`
             );
 
             for (const phase of phases) {
