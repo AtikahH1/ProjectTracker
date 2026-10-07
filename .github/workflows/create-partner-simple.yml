@@ -70,4 +70,26 @@ jobs:
               "The lifecycle phase sub-issues are created and linked automatically below."
             ].join("\n");
 
+            const parent = await github.rest.issues.create({
+              owner,
+              repo,
+              title: '[Partner] ${partner}',
+              body: parentBody
+            });
+
+            core.info(
+              'Created parent issue #${parent.date.number}: ${parent.data.html_url}'
+            );
+
+            for (const phase of phases) {
+              const childBody = [
+                '## ${phase.title}',
+                "",
+                phase.body,
+                "",
+                'Parent partner: ${partner}'
+              ].join("\n");
+              
+            
+
             
