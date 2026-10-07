@@ -89,6 +89,39 @@ jobs:
                 "",
                 'Parent partner: ${partner}'
               ].join("\n");
+
+              const child = await github.rest.issues.create({
+                owner,
+                repo,
+                title: '${partner} | ${phase.title}',
+                body: childBody
+              });
+
+              core.info(
+                'Created child issue #${child.data.number}: ${child.data.html_url}'
+              );
+
+              await github.request(
+                "POST /repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
+                {
+                  owner,
+                  repo,
+                  issue_number: parent.data.number,
+                  sub_issue_id: child.data.id,
+                  headers: {
+                    "X-GitHub-Api-Version": "2026-03-10"
+                  }
+                }
+              );
+
+              core.info(
+                'Linked issue #${child.data.number} under parent #${parent.data.number}'
+              );
+            }
+
+            core.notice(
+              'Created partner issue #${parent.data.number} with ${phases.length} sub-issues.'
+            );
               
             
 
