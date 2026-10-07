@@ -1,1 +1,38 @@
 name: Create partner simple
+
+on:
+  workflow_dispatch:
+    inputs:
+      partner_name:
+        description: "Partner Name"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  create-partner:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create parent issue and sub-issues
+        uses: actions/github-script@v8
+        env:
+          PARTNER_NAME: ${{ inputs.partner_name }}
+        with:
+          script: |
+            const partner = process.env.PARTNER_NAME.trim();
+
+            if (!partner) {
+              core.setFailed("Partner Name cannot be empty.");
+              return;
+            }
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            const phases = [
+              {
+                title: "Task One",
