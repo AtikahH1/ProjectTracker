@@ -73,32 +73,32 @@ jobs:
             const parent = await github.rest.issues.create({
               owner,
               repo,
-              title: '[Partner] ${partner}',
+              title: `[Partner] ${partner}`,
               body: parentBody
             });
 
             core.info(
-              'Created parent issue #${parent.date.number}: ${parent.data.html_url}'
+              `Created parent issue #${parent.date.number}: ${parent.data.html_url}`
             );
 
             for (const phase of phases) {
               const childBody = [
-                '## ${phase.title}',
+                `## ${phase.title}`,
                 "",
                 phase.body,
                 "",
-                'Parent partner: ${partner}'
+                `Parent partner: ${partner}`
               ].join("\n");
 
               const child = await github.rest.issues.create({
                 owner,
                 repo,
-                title: '${partner} | ${phase.title}',
+                title: `${partner} | ${phase.title}`,
                 body: childBody
               });
 
               core.info(
-                'Created child issue #${child.data.number}: ${child.data.html_url}'
+                `Created child issue #${child.data.number}: ${child.data.html_url}`
               );
 
               await github.request(
@@ -115,12 +115,12 @@ jobs:
               );
 
               core.info(
-                'Linked issue #${child.data.number} under parent #${parent.data.number}'
+                `Linked issue #${child.data.number} under parent #${parent.data.number}`
               );
             }
 
             core.notice(
-              'Created partner issue #${parent.data.number} with ${phases.length} sub-issues.'
+              `Created partner issue #${parent.data.number} with ${phases.length} sub-issues.`
             );
               
             
